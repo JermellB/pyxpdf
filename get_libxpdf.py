@@ -118,8 +118,7 @@ def unpack_tarball(tar_filename, dest):
 def _find_content_encoding(response, default="iso8859-1"):
     from email.message import Message
 
-    content_type = response.headers.get("Content-Type")
-    if content_type:
+    if content_type := response.headers.get("Content-Type"):
         msg = Message()
         msg.add_header("Content-Type", content_type)
         charset = msg.get_content_charset(default)
@@ -162,8 +161,7 @@ def find_max_version(libname, filenames, version_re=None):
         version_re = re.compile(r"%s-([0-9.]+[0-9](?:-[abrc0-9]+)?)" % libname)
     versions = []
     for fn in filenames:
-        match = version_re.search(fn)
-        if match:
+        if match := version_re.search(fn):
             version_string = match.group(1)
             versions.append(
                 (tuple(map(tryint, version_string.split("."))), version_string)
@@ -229,8 +227,7 @@ def call_subprocess(cmd, **kw):
     cwd = kw.get("cwd", ".")
     cmd_desc = " ".join(cmd)
     print('Running "%s" in %s' % (cmd_desc, cwd))
-    returncode = subprocess.call(cmd, **kw)
-    if returncode:
+    if returncode := subprocess.call(cmd, **kw):
         raise Exception('Command "%s" returned code %s' % (cmd_desc, returncode))
 
 

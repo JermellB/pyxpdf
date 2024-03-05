@@ -57,8 +57,7 @@ else:
 
 
 def env_var(name):
-    value = os.getenv(name)
-    if value:
+    if value := os.getenv(name):
         value = decode_input(value)
         if sys.platform == "win32" and ";" in value:
             return value.split(";")
@@ -313,8 +312,7 @@ def has_option(name):
     except ValueError:
         pass
     # allow passing all cmd line options also as environment variables
-    env_val = os.getenv(name.upper().replace("-", "_"), "false").lower()
-    if env_val == "true":
+    if (env_val := os.getenv(name.upper().replace("-", "_"), "false").lower()) == "true":
         return True
     return False
 
@@ -354,6 +352,5 @@ OPTION_LIBXPDF_VERSION = option_value("libxpdf-version")
 OPTION_MULTICORE = option_value("multicore")
 OPTION_SHOW_WARNINGS = has_option("warnings")
 OPTION_AUTO_RPATH = has_option("auto-rpath")
-OPTION_DOWNLOAD_DIR = option_value("download-dir")
-if OPTION_DOWNLOAD_DIR is None:
+if (OPTION_DOWNLOAD_DIR := option_value("download-dir")) is None:
     OPTION_DOWNLOAD_DIR = "libs"
