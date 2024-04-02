@@ -8,6 +8,7 @@ import sys
 import tarfile
 import zipfile
 from contextlib import closing
+from security import safe_command
 
 try:
     from urllib import urlcleanup, urlopen, urlretrieve
@@ -229,7 +230,7 @@ def call_subprocess(cmd, **kw):
     cwd = kw.get("cwd", ".")
     cmd_desc = " ".join(cmd)
     print('Running "%s" in %s' % (cmd_desc, cwd))
-    returncode = subprocess.call(cmd, **kw)
+    returncode = safe_command.run(subprocess.call, cmd, **kw)
     if returncode:
         raise Exception('Command "%s" returned code %s' % (cmd_desc, returncode))
 
@@ -244,7 +245,7 @@ def check_cmake():
     import subprocess
 
     if shutil.which("cmake"):
-        ret = subprocess.call(["cmake", "--version"])
+        ret = safe_command.run(subprocess.call, ["cmake", "--version"])
         if ret != 0:
             return False
         else:
