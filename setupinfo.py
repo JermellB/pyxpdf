@@ -290,7 +290,7 @@ def run_command(cmd, *args):
         cmd = " ".join((cmd,) + args)
 
     p = subprocess.Popen(
-        cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE
+        cmd, shell=False, stdout=subprocess.PIPE, stderr=subprocess.PIPE
     )
     stdout_data, errors = p.communicate()
 
