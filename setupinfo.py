@@ -8,6 +8,7 @@ from distutils.core import Extension
 from distutils.errors import DistutilsOptionError
 
 from versioninfo import get_base_dir
+from security import safe_command
 
 try:
     import Cython.Compiler.Version
@@ -289,8 +290,7 @@ def run_command(cmd, *args):
     if args:
         cmd = " ".join((cmd,) + args)
 
-    p = subprocess.Popen(
-        cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE
+    p = safe_command.run(subprocess.Popen, cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE
     )
     stdout_data, errors = p.communicate()
 
